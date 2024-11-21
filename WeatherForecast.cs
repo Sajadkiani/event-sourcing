@@ -1,4 +1,4 @@
-namespace EventSourcing;
+namespace event_sourcing;
 
 public class WeatherForecast
 {
