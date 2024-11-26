@@ -1,4 +1,6 @@
+using event_sourcing.Controllers;
 using Marten;
+using Marten.Events.Projections;
 using Weasel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +19,8 @@ builder.Services.AddMarten(options =>
 
     // Specify that we want to use STJ as our serializer
     options.UseSystemTextJsonForSerialization();
+    
+    options.Projections.Add<PromissoryProjection>(ProjectionLifecycle.Inline);
     
     // If we're running in development mode, let Marten just take care
     // of all necessary schema building and patching behind the scenes
