@@ -11,11 +11,13 @@ public class TestController : ControllerBase
 {
     private readonly ILogger<TestController> _logger;
     private readonly IDocumentSession _session;
+    private readonly IDocumentStore _store;
 
-    public TestController(ILogger<TestController> logger, IDocumentSession session)
+    public TestController(ILogger<TestController> logger, IDocumentSession session, IDocumentStore store)
     {
         _logger = logger;
         _session = session;
+        _store = store;
     }
 
     [HttpPost("promissory/add")]
@@ -87,6 +89,14 @@ public class TestController : ControllerBase
             .ToListAsync();
         
         return Ok(finishedPromissories);
+    }
+    
+    [HttpPost("promissory/admin/projections/rebuild")]
+    public async Task<IActionResult> RebuildProjections()
+    {
+        await _store.Advanced.Clean.DeleteAllEventDataAsync();
+        // await _store..RebuildProjection<PromissoryProjection>();
+        return Ok("Rebuild completed");
     }
 }
 
